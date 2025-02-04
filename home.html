@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>自己紹介サイト - Wada Yuto</title>
+  <!-- Font Awesome（アイコン用）CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- 外部CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 薄暗い背景 -->
+  <div id="popup-overlay"></div>
+
+  <!-- ポップアップ -->
+  <div id="popup" class="popup">
+      <div class="popup-inner">
+          <button id="popup-close" class="popup-close">閉じる</button>
+          <div id="popup-content"></div>
+      </div>
+  </div>
+
+  <!-- ヘッダー・ナビゲーション -->
+
+  <header>
+    <nav class="nav-container">
+      <div class="logo">
+        <a href="home.html">Wada Yuto</a>
+      </div>
+      <div class="hamburger" id="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="blog.html">Blog</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 各セクション -->
+  <main>
+    <!-- 1. プロフィール -->
+    <section id="profile" class="section fade-in-up top-section">
+      <div class="container">
+        <h1>Wada Yuto</h1>
+        <img src="image/一押し.jpg" alt="プロフィール写真" class="profile-img" />
+        <p>
+            こんにちは、Wada Yutoです。<br/>将来は優れたエンジニアとして、<br/>目の前の人だけでなく、多くの人の役に立つシステムを生み出したいと考えています。<br/>技術を磨きながら、人々に頼られ、求められる存在へと成長していきたいです。
+        </p>
+      </div>
+    </section>
+
+    <!-- 2. 経歴・学歴 -->
+    <section id="education" class="section fade-in-up">
+      <div class="container">
+        <h2>学歴・経歴・資格</h2>
+
+        <h3>学歴</h3>
+        <p>専修大学　ネットワーク情報学部</p>
+        <p>DB（データサイエンス）コース</p>
+        
+        <h3>経歴</h3>
+        <ul class="about-list">
+          <li>2021/10〜2022/3：侍エンジニア「機械学習コース」受講</li>
+          <li>2022/4〜2023/1：専修リーダーシップ開発プログラム受講</li>
+          <li>2024/3〜：しらたまサークル設立・運営</li>
+          </li>
+        </ul>
+        <h3>資格</h3>
+        <ul class="about-list">
+          <li>2023/5：日本ディープラーニング協会・G検定</li>
+          <li>2024/5：ITパスポート</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 4. プロジェクト・活動 -->
+    <section id="projects" class="section fade-in-up">
+      <div class="container">
+        <h2>プロジェクト・活動</h2>
+        <div class="project-item">
+          <h3>「しらたまサークル」設立・運営</h3>
+          <p>設立者・副代表として、サークルの運営を行っています。<br/>
+            企画や情報発信を通じて専修大学生の質を高めるための取り組みを行なっています。</p>
+        </div>
+        <div class="project-item">
+          <h3>「しらたま寺子屋」起案・講師</h3>
+          <p>しらたま寺子屋プロジェクトを立ち上げ、講師として活動中。<br/>
+            AI講座などを開催し専修大学生のリテラシー向上を目指しています。</p>
+        </div>
+        <div class="project-item">
+          <h3>「しらたまサーチ」開発・運営</h3>
+          <p>しらたまサーチとは、しらたまのインスタグラムでの発信を検索できるWebアプリケーション<br/>
+            大学で使うツール一覧も掲載しています。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ポートフォリオ -->
+    <section id="portfolio" class="section fade-in-up">
+        <div class="container portfolio-container">
+            <h2>ポートフォリオ</h2>
+            <div id="portfolio-items">
+                <p>ポートフォリオを読み込み中...</p>
+            </div>
+            <button id="show-more-btn" class="show-more-btn">もっと見る</button>
+        </div>
+      </section>
+
+    <!-- 8. ブログ・最新情報 -->
+    <section id="blog" class="section fade-in-up">
+        <div class="container">
+            <h2>ブログ・最新情報</h2>
+            <div id="blog-posts">
+                <p>ブログ記事を読み込み中...</p>
+            </div>
+        </div>
+      </section>
+  </main>
+
+  <!-- フッター -->
+  <footer class="fade-in-up">
+    <div class="container">
+      <p>&copy; 2025 Wada Yuto. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- 外部JS -->
+  <script src="script.js"></script>
+</body>
+</html>

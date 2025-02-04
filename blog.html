@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog - Wada Yuto</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <nav class="nav-container">
+      <div class="logo"><a href="home.html">Wada Yuto</a></div>
+      <div class="hamburger" id="hamburger">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="blog.html">Blog</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+        <!-- ポップアップの背景 -->
+<div id="popup-overlay"></div>
+
+<!-- ポップアップウィンドウ -->
+<div id="popup" class="popup">
+    <div class="popup-inner">
+        <button id="popup-close" class="popup-close">閉じる</button>
+        <div id="popup-content"></div>
+    </div>
+</div>
+    <section id="blog" class="section fade-in-up top-section">
+      <div class="container blog-container">
+        <h1>Blog</h1>
+        <div id="blog-posts">
+          <p>ブログ記事を読み込み中...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Wada Yuto. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

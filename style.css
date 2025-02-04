@@ -1,0 +1,519 @@
+/* スムーズスクロール設定 */
+html {
+    scroll-behavior: smooth;
+  }
+  
+  /* リセット */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* 基本設定 */
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #222;              /* 濃いグレー */
+    background-color: #fff;   /* 白 */
+    line-height: 1.6;
+  }
+  
+  /* コンテナ */
+  .container {
+    width: 90%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* ヘッダー */
+  header {
+    background-color: #fff;   /* 白 */
+    color: #222;              /* テキストは濃いグレー */
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid #ddd;  /* ヘッダーと main の間のグレー区切り線 */
+  }
+  
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+  }
+  
+  /* ヘッダーのロゴ（"Wada Yuto"）はホバー時に変化しない */
+  /* ロゴに position: relative と高い z-index を設定 */
+  .logo {
+    position: relative;
+    z-index: 1200;
+  }
+  .logo a {
+    color: #222;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    /* transition 削除 */
+  }
+  
+  /* ナビゲーションメニュー（デスクトップ用） */
+  .nav-menu {
+    list-style: none;
+    display: flex;
+    /* モバイル時と区別するため z-index 指定（ロゴより下） */
+    z-index: 1000;
+  }
+  .nav-menu li {
+    margin-left: 2rem;
+  }
+  .nav-menu li a {
+    color: #222;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all 0.3s;
+  }
+  .nav-menu li a:hover {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #000;
+  }
+  
+  /* ハンバーガーメニュー（モバイル用） */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    position: relative;
+    z-index: 1100;  /* ハンバーガーはロゴと nav-menu の中間に */
+  }
+  .hamburger .bar {
+    width: 25px;
+    height: 3px;
+    background-color: #222;
+    margin: 4px 0;
+    transition: all 0.3s ease;
+  }
+  
+  /* ハンバーガーが開いた状態（× に変形） */
+  .hamburger.open .bar:nth-child(1) {
+    transform: translateY(11px) rotate(45deg);
+  }
+  .hamburger.open .bar:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger.open .bar:nth-child(3) {
+    transform: translateY(-11px) rotate(-45deg);
+  }
+  
+  /* モバイル用ナビゲーションの設定 */
+  @media (max-width: 768px) {
+    .hamburger {
+      display: flex;
+    }
+    .nav-menu {
+      flex-direction: column;  /* 縦並び */
+      align-items: center;
+      position: absolute;
+      top: 70px;  /* ヘッダーの下に配置 */
+      left: 0;
+      width: 100%;
+      background-color: #fff;
+      /* 初期状態：画面外（上方向へ）隠す */
+      transform: translateY(-100vh);
+      transition: transform 0.4s ease-in-out;
+    }
+    /* active クラス付与で下にスライドして表示 */
+    .nav-menu.active {
+      transform: translateY(0);
+    }
+    .nav-menu li {
+      margin: 1rem 0;
+    }
+  }
+  
+  /* セクション共通（基本は中央揃え） */
+  .section {
+    padding: 10px 0 60px;
+    margin-top: 0px;  /* 固定ヘッダー分の余白 */
+    text-align: center;
+  }
+  .top-section {
+    margin: 150px 0 100px;
+  }
+  
+  /* 「ポートフォリオ」セクションだけ左寄せに上書き */
+  #portfolio {
+    text-align: left;
+  }
+  
+  /* main 内の ul/li のリストマーカーを非表示に */
+  main ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  /* プロフィール */
+  #profile h1 {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+  }
+  .profile-img {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ccc;
+    margin-bottom: 1rem;
+  }
+  #profile p {
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  /* 経歴・学歴 */
+  #education h2,
+  #skills h2,
+  #projects h2,
+  #portfolio h2,
+  #sns h2,
+  #hobbies h2,
+  #blog h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #000;
+  }
+  
+  #education h3 {
+    font-size: 1.8rem;
+    margin: 1rem 0 0.5rem;
+    color: #333;
+  }
+  
+  #education p,
+  #education ul{
+    font-size: 1.1rem;
+    color: #444;
+  }
+
+  /* 学歴・経歴・資格セクションの中央揃え */
+#education .container {
+    max-width: 800px; /* コンテンツ幅を制限して中央に */
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* h3 タイトルの中央揃え */
+#education h3 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+}
+
+/* リストの中央揃えとスタート位置の統一 */
+.about-list {
+    list-style: none; /* デフォルトのリストスタイルを消す */
+    padding: 0;
+    text-align: left; /* リストアイテムは左揃え */
+    display: inline-block; /* リスト全体を中央配置 */
+}
+
+/* li タグのデザインを統一 */
+.about-list li {
+    font-size: 1.2rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+
+  /* プロジェクト・活動 */
+  /* プロジェクト活動のセクションは中央揃えに変更 */
+  
+  /* ポートフォリオ */
+.portfolio-container h2, .portfolio-container h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.portfolio-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+.portfolio-container button  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem auto;
+}
+/* ポートフォリオを中央揃え */
+#portfolio-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+}
+
+/* 各ポートフォリオアイテムのスタイル */
+.portfolio-item {
+    width: 95%;
+    max-width: 1000px; /* 横幅を広げる */
+    border: 1px solid #ddd;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.portfolio-item:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.portfolio-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.portfolio-date {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.portfolio-technology {
+    font-size: 1rem;
+    color: #007bff;
+}
+
+#popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    padding: 2rem;
+    z-index: 1001; /* 常に前面 */
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#popup.fade-in {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+#popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+/* ポップアップの中身 */
+.popup-inner {
+    padding: 2rem;
+    text-align: left;
+}
+
+/* 閉じるボタン */
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 1001; /* ボタンが押せるように z-index を調整 */
+}
+
+.popup-close:hover {
+    background: #0056b3;
+}
+
+/* ポップアップのコンテンツ */
+.popup-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.popup-content p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.popup-content .popup-text {
+    margin-top: 1rem;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+  
+  /* SNS・連絡先 */
+  .sns-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 0;
+  }
+  .sns-links li a {
+    text-decoration: none;
+    font-size: 1.1rem;
+    color: #222;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+  }
+  .sns-links li img {
+    margin-right:5px;
+  }
+  .sns-links li a:hover {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+  }
+  
+  /* 趣味・好きなこと */
+  #hobbies p {
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  /* ブログ・最新情報 */
+/* ブログ記事リスト */
+/* ブログリスト全体のデザイン */
+#blog-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0;
+}
+
+/* ブログリストアイテム */
+
+.blog-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.blog-item:hover {
+    background-color: #f9f9f9;
+}
+
+/* 日付部分 */
+.blog-date {
+    flex: 1;
+    text-align: left;
+    color: #555;
+}
+
+/* カテゴリ部分 */
+.blog-category {
+    flex: 1;
+    text-align: center;
+    color: white;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin: 0 0.5rem;
+    min-width: 80px;
+}
+
+/* タイトル部分 */
+.blog-title {
+    flex: 5;
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* もっと見るボタン */
+.show-more-btn {
+    margin-top: 1rem;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.show-more-btn:hover {
+    background-color: #0056b3;
+}
+
+  
+  /* Fade-in アニメーション */
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s forwards;
+    animation-delay: 0.2s;
+  }
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .about-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+    /* ポートフォリオのカードデザイン */
+.portfolio-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+ .portfolio-item {
+    width: 300px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    text-align: center;
+}
+
+.portfolio-item h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.blog-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
