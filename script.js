@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const popupClose = document.getElementById('popup-close');
     const popupContent = document.getElementById('popup-content');
     const showMoreBtn = document.getElementById('show-more-btn');
+    const portfolioContainer = document.getElementById('portfolio-items');
     const blogContainer = document.getElementById('blog-posts');
     const blogShowMoreBtn = document.createElement('button');
 
@@ -83,12 +84,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ポートフォリオの取得と表示
     fetch(portfolioUrl)
-        .then(response => response.json())
-        .then(data => {
-            portfolios = data.values;
-            updatePortfolioDisplay();
-        })
-        .catch(error => console.error('Error fetching portfolio data:', error));
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (!data.values || data.values.length === 0) {
+            throw new Error('No data found in the spreadsheet');
+        }
+        portfolios = data.values;
+        updateBlogDisplay();
+    })
+    .catch(error => {
+        console.error('Error fetching blog data:', error);
+        portfolioContainer.innerHTML = '<p>ポートフォリオは現在ございません</p>';
+    });
 
     function updatePortfolioDisplay() {
         const portfolioContainer = document.getElementById('portfolio-items');
@@ -198,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => {
             console.error('Error fetching blog data:', error);
-            blogContainer.innerHTML = '<p>ブログデータの読み込みに失敗しました。</p>';
+            blogContainer.innerHTML = '<p>ブログ記事は現在ございません</p>';
         });
 
     function updateBlogDisplay() {

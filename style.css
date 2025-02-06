@@ -122,7 +122,7 @@ html {
       flex-direction: column;  /* 縦並び */
       align-items: center;
       position: absolute;
-      top: 70px;  /* ヘッダーの下に配置 */
+      top: 62px;  /* ヘッダーの下に配置 */
       left: 0;
       width: 100%;
       background-color: #fff;
@@ -242,6 +242,13 @@ html {
 
 
   /* プロジェクト・活動 */
+  .project-item, .wada-item {
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
   /* プロジェクト活動のセクションは中央揃えに変更 */
   
   /* ポートフォリオ */
