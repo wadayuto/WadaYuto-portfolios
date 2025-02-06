@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sheetId = '1jTS9ebhEmPmOtRO2Ay8N_TDxMMm_nFuMdJ4Z25SdHtg';
     const apiKey = 'AIzaSyCszkaCUKnDicqAPkOjZfXLXaqeHN1yjwM';
     const portfolioRange = 'ポートフォリオ一覧!A2:E';
-    const blogRange = 'News一覧!A2:E';
+    const blogRange = 'News一覧!A2:G';
 
     const portfolioUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${portfolioRange}?key=${apiKey}`;
     const blogUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${blogRange}?key=${apiKey}`;

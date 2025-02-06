@@ -1,6 +1,12 @@
 /* スムーズスクロール設定 */
 html {
     scroll-behavior: smooth;
+    font-size: 16px;
+  }
+  @media (max-width: 768px){
+    html {
+      font-size: 14px;
+    }
   }
   
   /* リセット */
@@ -222,12 +228,16 @@ html {
 /* li タグのデザインを統一 */
 .about-list li {
     font-size: 1.2rem;
-    padding: 0.5rem 0;
+    margin: 0.5rem 0;
     border-bottom: 1px solid #ddd;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
+}
+.about-list-home h3{
+  margin:1rem 0;
+
 }
 
 
@@ -516,4 +526,32 @@ html {
 .blog-container h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
+}
+
+.about-container h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.about-container{
+  padding-bottom: 8rem;
+}
+/* abot.htmlレスポンシブ */
+@media (max-width: 768px){
+    .about-container h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    .about-container{
+        padding-bottom: 8rem;
+    }
+    .about-container h3 {
+        display: flex;
+        justify-content: center;
+        margin: 0.5rem auto;
+    }
+    .about-container .education-list li{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
