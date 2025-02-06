@@ -8,10 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const showMoreBtn = document.getElementById('show-more-btn');
     const blogContainer = document.getElementById('blog-posts');
     const blogShowMoreBtn = document.createElement('button');
-    const blogPopupOverlay = document.getElementById('popup-overlay');
-    const blogPopup = document.getElementById('popup');
-    const blogPopupClose = document.getElementById('popup-close');
-    const blogPopupContent = document.getElementById('popup-content');
 
     // ハンバーガーメニューのトグル
     hamburger.addEventListener('click', function () {
@@ -39,29 +35,48 @@ document.addEventListener('DOMContentLoaded', function () {
             document.body.classList.remove('no-scroll'); // 背景スクロールを有効化
         }, 300);
     }
+
+    // 「閉じる」ボタンが存在する場合はクリックイベントを設定
     if (popupClose) {
         popupClose.addEventListener('click', closePopup);
+    } else {
+        console.error('Popup Close button not found');
     }
 
+    // 背景（オーバーレイ）をクリックした場合にポップアップを閉じる
     if (popupOverlay) {
-        popupOverlay.addEventListener('click', closePopup);
+        popupOverlay.addEventListener('click', function (e) {
+            if (e.target === popupOverlay) {
+                closePopup();
+            }
+        });
     }
-
-    // 背景クリックで閉じる場合
-    popupOverlay.addEventListener('click', function (e) {
-        if (e.target === popupOverlay) {
-            closePopup();
-        }
-    });
 
     // スプレッドシートからデータを取得
     const sheetId = '1jTS9ebhEmPmOtRO2Ay8N_TDxMMm_nFuMdJ4Z25SdHtg';
     const apiKey = 'AIzaSyCszkaCUKnDicqAPkOjZfXLXaqeHN1yjwM';
-    const portfolioRange = 'ポートフォリオ一覧!A2:E';
-    const blogRange = 'News一覧!A2:G';
+    const portfolioRange = 'ポートフォリオ一覧!A2:I';
+    const blogRange = 'News一覧!A2:H';
 
     const portfolioUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${portfolioRange}?key=${apiKey}`;
     const blogUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${blogRange}?key=${apiKey}`;
+
+    // GoogleドライブのURLを変換する（必要な場合）
+    function transformGoogleDriveUrl(url) {
+        if (url.includes('drive.google.com')) {
+            // パターン1: /d/FILE_ID/...
+            let fileIdMatch = url.match(/\/d\/([^/]+)/);
+            if (fileIdMatch && fileIdMatch[1]) {
+                return `https://drive.google.com/uc?id=${fileIdMatch[1]}`;
+            }
+            // パターン2: open?id=FILE_ID
+            const idParamMatch = url.match(/[?&]id=([^&]+)/);
+            if (idParamMatch && idParamMatch[1]) {
+                return `https://drive.google.com/uc?id=${idParamMatch[1]}`;
+            }
+        }
+        return url;
+    }
 
     let portfolios = []; // ポートフォリオデータを格納
     let displayedCount = 3; // 初期表示数
@@ -72,17 +87,18 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             portfolios = data.values;
             updatePortfolioDisplay();
-        });
+        })
+        .catch(error => console.error('Error fetching portfolio data:', error));
 
     function updatePortfolioDisplay() {
         const portfolioContainer = document.getElementById('portfolio-items');
         let html = '';
 
         portfolios.slice(0, displayedCount).forEach((item, index) => {
-            let [title, date, description, technology] = item;
-
-            description = description || ''; // 空の場合の対応
-            const formattedDescription = description.replace(/\r?\n/g, "<br>"); // 改行を `<br>` に変換
+            // ※変数名「projectUrlsText」に修正
+            let [title, date, description, technology, projectUrlsText, projectUrls, referenceUrlsText, referenceUrls, imageUrls] = item;
+            description = description || '';
+            const formattedDescription = description.replace(/\r?\n/g, "<br>");
             html += `
                 <div class="portfolio-item" data-index="${index}">
                     <h3 class="portfolio-title">${title}</h3>
@@ -94,51 +110,72 @@ document.addEventListener('DOMContentLoaded', function () {
 
         portfolioContainer.innerHTML = html;
 
-        // 各アイテムにクリックイベントを追加
+        // 各ポートフォリオアイテムにクリックイベントを追加
         document.querySelectorAll('.portfolio-item').forEach(item => {
             item.addEventListener('click', function () {
                 const index = item.getAttribute('data-index');
-                let [title, date, description, technology] = portfolios[index];
-
+                let [title, date, description, technology, projectUrlsText = '', projectUrls = '', referenceUrlsText = '', referenceUrls = '', imageUrls = ''] = portfolios[index];
                 description = description || '';
                 const formattedDescription = description.replace(/\r?\n/g, "<br>");
+
+                // 作品URLをリスト形式に変換
+                let projectLinks = '';
+                if (projectUrls) {
+                    const projectUrlList = projectUrls.split(',');
+                    const linkTextList = projectUrlsText.split(',');
+                    projectLinks = projectUrlList.map((url, i) => {
+                        return `<li><a href="${url.trim()}" target="_blank">${linkTextList[i]?.trim() || "作品リンク"}</a></li>`;
+                    }).join('');
+                    projectLinks = `<p><strong>作品URL:</strong></p><ul>${projectLinks}</ul>`;
+                }
+
+                // 参考URLをリスト形式に変換
+                let referenceLinks = '';
+                if (referenceUrls) {
+                    const referenceUrlList = referenceUrls.split(',');
+                    const linkTextList = referenceUrlsText.split(',');
+                    referenceLinks = referenceUrlList.map((url, i) => {
+                        return `<li><a href="${url.trim()}" target="_blank">${linkTextList[i]?.trim() || "参考リンク"}</a></li>`;
+                    }).join('');
+                    referenceLinks = `<p><strong>参考URL:</strong></p><ul>${referenceLinks}</ul>`;
+                }
+
+                // 画像ギャラリーを生成（GoogleドライブのURL変換も実施）
+                let imageGallery = '';
+                if (imageUrls) {
+                    const imageList = imageUrls.split(',').map(url => {
+                        const trimmedUrl = transformGoogleDriveUrl(url.trim());
+                        return `<img src="${trimmedUrl}" alt="作品画像" class="popup-image">`;
+                    }).join('');
+                    imageGallery = `<div class="popup-image-container">${imageList}</div>`;
+                }
 
                 openPopup(`
                     <h3>${title}</h3>
                     <p><strong>日付:</strong> ${date}</p>
                     <p><strong>技術:</strong> ${technology}</p>
-                    <p>${description}</p>
+                    ${projectLinks}
+                    ${referenceLinks}
+                    ${imageGallery}
+                    <p>${formattedDescription}</p>
                 `);
             });
         });
+
+        // 「もっと見る」ボタンの表示制御（すべて表示済みなら非表示）
+        if (showMoreBtn && displayedCount >= portfolios.length) {
+            showMoreBtn.style.display = 'none';
+        }
     }
 
-    // 「もっと見る」ボタンのクリックイベント
-    // 「もっと見る」ボタンのクリックイベント
+    // 「もっと見る」ボタンのクリックイベント（ポートフォリオ）
     if (showMoreBtn) {
         showMoreBtn.addEventListener('click', function () {
             displayedCount += 3; // 表示数を増やす
             updatePortfolioDisplay();
-
-            if (displayedCount >= portfolios.length) {
-                showMoreBtn.style.display = 'none'; // 全て表示したらボタンを非表示に
-            }
         });
     } else {
         console.error('Show More button not found');
-    }
-
-    // ポップアップを閉じる
-    if (popupClose) {
-        popupClose.addEventListener('click', function () {
-            popup.classList.remove('fade-in');
-            setTimeout(() => {
-                popup.style.display = 'none';
-                popupOverlay.style.display = 'none';
-            }, 300);
-        });
-    } else {
-        console.error('Popup Close button not found');
     }
 
     let blogs = []; // ブログデータを格納
@@ -168,12 +205,10 @@ document.addEventListener('DOMContentLoaded', function () {
         let html = '';
 
         blogs.slice(0, displayedBlogCount).forEach((item, index) => {
-            let [date, category, title, content, colorCode] = item;
-
-            content = content || ''; // 空の場合の対応
+            let [date, category, title, content, colorCode, linkText, referenceUrls, imageUrls] = item;
+            content = content || '';
             const formattedContent = content.replace(/\r?\n/g, "<br>");
-
-            const backgroundColor = colorCode ? `#${colorCode}` : '#007bff'; // 色コードがない場合はデフォルト
+            const backgroundColor = colorCode ? `#${colorCode}` : '#007bff';
 
             html += `
                 <div class="blog-item" data-index="${index}">
@@ -186,31 +221,46 @@ document.addEventListener('DOMContentLoaded', function () {
     
         blogContainer.innerHTML = html;
     
-        // 各アイテムにクリックイベントを追加
+        // 各ブログアイテムにクリックイベントを追加
         document.querySelectorAll('.blog-item').forEach(item => {
             item.addEventListener('click', function () {
                 const index = item.getAttribute('data-index');
-                let [date, category, title, content] = blogs[index];
-
+                let [date, category, title, content, colorCode, linkText = '', referenceUrls = '', imageUrls = ''] = blogs[index];
                 content = content || '';
                 const formattedContent = content.replace(/\r?\n/g, "<br>");
 
-    
-                blogPopupContent.innerHTML = `
+                let referenceLinks = '';
+                if (referenceUrls) {
+                    const referenceUrlList = referenceUrls.split(',');
+                    const linkTextList = linkText.split(',');
+                    referenceLinks = referenceUrlList.map((url, i) => {
+                        return `<li><a href="${url.trim()}" target="_blank">${linkTextList[i]?.trim() || "参考リンク"}</a></li>`;
+                    }).join('');
+                    referenceLinks = `<p><strong>参考URL:</strong></p><ul>${referenceLinks}</ul>`;
+                }
+
+                // 画像ギャラリーを生成
+                let imageGallery = '';
+                if (imageUrls) {
+                    const imageList = imageUrls.split(',').map(url => {
+                        const trimmedUrl = transformGoogleDriveUrl(url.trim());
+                        return `<img src="${trimmedUrl}" alt="ブログ画像" class="popup-image">`;
+                    }).join('');
+                    imageGallery = `<div class="popup-image-container">${imageList}</div>`;
+                }
+
+                openPopup(`
                     <h3>${title}</h3>
                     <p><strong>日付:</strong> ${date}</p>
                     <p><strong>カテゴリ:</strong> ${category}</p>
-                    <p>${content}</p>
-                `;
-                blogPopupOverlay.style.display = 'block';
-                blogPopup.style.display = 'flex';
-                setTimeout(() => {
-                    blogPopup.classList.add('fade-in');
-                }, 0);
+                    ${referenceLinks}
+                    ${imageGallery}
+                    <p>${formattedContent}</p>
+                `);
             });
         });    
 
-        // もっと見るボタンの表示制御
+        // 「もっと見る」ボタンの表示制御（ブログ）
         if (displayedBlogCount >= blogs.length) {
             blogShowMoreBtn.style.display = 'none';
         } else {
@@ -218,38 +268,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 「もっと見る」ボタンの設定
+    // 「もっと見る」ボタンの設定（ブログ）
     blogShowMoreBtn.textContent = 'もっと見る';
     blogShowMoreBtn.classList.add('show-more-btn');
-    blogContainer.parentNode.appendChild(blogShowMoreBtn);
+    if (blogContainer.parentNode) {
+        blogContainer.parentNode.appendChild(blogShowMoreBtn);
+    }
 
     blogShowMoreBtn.addEventListener('click', function () {
         displayedBlogCount += 3; // 表示数を増やす
         updateBlogDisplay();
     });
-
-    // ポップアップを閉じる
-    blogPopupClose.addEventListener('click', function () {
-        blogPopup.classList.remove('fade-in');
-        setTimeout(() => {
-            blogPopup.style.display = 'none';
-            blogPopupOverlay.style.display = 'none';
-        }, 300);
-    });
-
-    // 背景クリックでポップアップを閉じる
-    blogPopupOverlay.addEventListener('click', function () {
-        blogPopup.classList.remove('fade-in');
-        setTimeout(() => {
-            blogPopup.style.display = 'none';
-            blogPopupOverlay.style.display = 'none';
-        }, 300);
-    });
-
-    if (document.getElementById('portfolio-items')) {
-        fetchPortfolioData();
-    }
-    if (document.getElementById('blog-posts')) {
-        fetchBlogData();
-    }
 });

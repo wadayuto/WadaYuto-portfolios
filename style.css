@@ -401,6 +401,49 @@ body.no-scroll {
 .popup-content::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
+.popup-content ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.popup-content ul li {
+  margin-bottom: 5px;
+}
+
+.popup-content a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.popup-content a:hover {
+  text-decoration: underline;
+}
+
+/* ポップアップの画像コンテナ */
+.popup-image-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* 各画像のスタイル */
+.popup-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 200px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+/* ホバー時のエフェクト */
+.popup-image:hover {
+  transform: scale(1.05);
+}
 
   
   /* SNS・連絡先 */
