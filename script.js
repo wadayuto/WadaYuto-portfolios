@@ -95,10 +95,10 @@ document.addEventListener('DOMContentLoaded', function () {
             throw new Error('No data found in the spreadsheet');
         }
         portfolios = data.values;
-        updateBlogDisplay();
+        updatePortfolioDisplay();
     })
     .catch(error => {
-        console.error('Error fetching blog data:', error);
+        console.error('Error fetching portfolios data:', error);
         portfolioContainer.innerHTML = '<p>ポートフォリオは現在ございません</p>';
     });
 
