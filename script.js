@@ -19,6 +19,41 @@ document.addEventListener('DOMContentLoaded', function () {
         hamburger.classList.toggle('open');
     });
 
+    // ポップアップを開くときにスクロールを無効化
+    function openPopup(content) {
+        popupContent.innerHTML = content;
+        popupOverlay.style.display = 'block';
+        popup.style.display = 'flex';
+        setTimeout(() => {
+            popup.classList.add('fade-in');
+        }, 0);
+        document.body.classList.add('no-scroll'); // 背景スクロールを無効化
+    }
+
+    // ポップアップを閉じるときにスクロールを復活
+    function closePopup() {
+        popup.classList.remove('fade-in');
+        setTimeout(() => {
+            popup.style.display = 'none';
+            popupOverlay.style.display = 'none';
+            document.body.classList.remove('no-scroll'); // 背景スクロールを有効化
+        }, 300);
+    }
+    if (popupClose) {
+        popupClose.addEventListener('click', closePopup);
+    }
+
+    if (popupOverlay) {
+        popupOverlay.addEventListener('click', closePopup);
+    }
+
+    // 背景クリックで閉じる場合
+    popupOverlay.addEventListener('click', function (e) {
+        if (e.target === popupOverlay) {
+            closePopup();
+        }
+    });
+
     // スプレッドシートからデータを取得
     const sheetId = '1jTS9ebhEmPmOtRO2Ay8N_TDxMMm_nFuMdJ4Z25SdHtg';
     const apiKey = 'AIzaSyCszkaCUKnDicqAPkOjZfXLXaqeHN1yjwM';
@@ -44,7 +79,10 @@ document.addEventListener('DOMContentLoaded', function () {
         let html = '';
 
         portfolios.slice(0, displayedCount).forEach((item, index) => {
-            const [title, date, description, technology] = item;
+            let [title, date, description, technology] = item;
+
+            description = description || ''; // 空の場合の対応
+            const formattedDescription = description.replace(/\r?\n/g, "<br>"); // 改行を `<br>` に変換
             html += `
                 <div class="portfolio-item" data-index="${index}">
                     <h3 class="portfolio-title">${title}</h3>
@@ -60,19 +98,17 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.portfolio-item').forEach(item => {
             item.addEventListener('click', function () {
                 const index = item.getAttribute('data-index');
-                const [title, date, description, technology] = portfolios[index];
+                let [title, date, description, technology] = portfolios[index];
 
-                popupContent.innerHTML = `
+                description = description || '';
+                const formattedDescription = description.replace(/\r?\n/g, "<br>");
+
+                openPopup(`
                     <h3>${title}</h3>
                     <p><strong>日付:</strong> ${date}</p>
                     <p><strong>技術:</strong> ${technology}</p>
                     <p>${description}</p>
-                `;
-                popupOverlay.style.display = 'block';
-                popup.style.display = 'flex';
-                setTimeout(() => {
-                    popup.classList.add('fade-in');
-                }, 0);
+                `);
             });
         });
     }
@@ -132,9 +168,13 @@ document.addEventListener('DOMContentLoaded', function () {
         let html = '';
 
         blogs.slice(0, displayedBlogCount).forEach((item, index) => {
-            const [date, category, title, content, colorCode] = item; // 色コードを取得
-            const backgroundColor = colorCode ? `#${colorCode}` : '#007bff'; // 色コードがない場合はデフォルトを設定
-    
+            let [date, category, title, content, colorCode] = item;
+
+            content = content || ''; // 空の場合の対応
+            const formattedContent = content.replace(/\r?\n/g, "<br>");
+
+            const backgroundColor = colorCode ? `#${colorCode}` : '#007bff'; // 色コードがない場合はデフォルト
+
             html += `
                 <div class="blog-item" data-index="${index}">
                     <span class="blog-date">${date}</span>
@@ -150,7 +190,11 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.blog-item').forEach(item => {
             item.addEventListener('click', function () {
                 const index = item.getAttribute('data-index');
-                const [date, category, title, content] = blogs[index];
+                let [date, category, title, content] = blogs[index];
+
+                content = content || '';
+                const formattedContent = content.replace(/\r?\n/g, "<br>");
+
     
                 blogPopupContent.innerHTML = `
                     <h3>${title}</h3>

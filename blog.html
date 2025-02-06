@@ -25,16 +25,15 @@
   </header>
 
   <main>
-        <!-- ポップアップの背景 -->
-<div id="popup-overlay"></div>
-
-<!-- ポップアップウィンドウ -->
-<div id="popup" class="popup">
-    <div class="popup-inner">
+    <div id="popup-overlay"></div>
+    <div id="popup">
         <button id="popup-close" class="popup-close">閉じる</button>
-        <div id="popup-content"></div>
+        <div class="popup-inner">
+            <div id="popup-content" class="popup-content">
+                <!-- ここに動的にコンテンツが追加される -->
+            </div>
+        </div>
     </div>
-</div>
     <section id="blog" class="section fade-in-up top-section">
       <div class="container blog-container">
         <h1>Blog</h1>

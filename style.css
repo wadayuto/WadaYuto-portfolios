@@ -316,6 +316,14 @@ html {
     z-index: 1001; /* 常に前面 */
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
+    max-height: 80vh;  /* 画面の80%の高さまで */
+    overflow: hidden;   /* 全体のスクロールを防ぐ */
+    display: flex;
+    flex-direction: column;
+}
+body.no-scroll {
+  overflow: hidden;
+  height: 100vh;
 }
 
 #popup.fade-in {
@@ -374,6 +382,26 @@ html {
     font-size: 1rem;
     line-height: 1.6;
 }
+
+.popup-content {
+  flex-grow: 1;  /* コンテンツが増えたとき、スクロールできるようにする */
+  max-height: 60vh;  /* 画面の60%の高さまで */
+    overflow-y: auto;  /* 縦方向のスクロールを有効に */
+    padding-right: 10px; /* スクロールバーとテキストの余白を確保 */
+}
+.popup-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.popup-content::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 4px;
+}
+
+.popup-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
   
   /* SNS・連絡先 */
   .sns-links {
